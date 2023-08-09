@@ -85,6 +85,7 @@ export type GridPlan = {
 	availableForPurchase: boolean;
 	productNameShort?: string | null;
 	planTitle: TranslateResult;
+	billingTimeframe?: TranslateResult | null;
 	current?: boolean;
 	isMonthlyPlan?: boolean;
 	cartItemForPlan?: {
@@ -288,6 +289,7 @@ const useGridPlans = ( {
 			availableForPurchase,
 			productNameShort,
 			planTitle: planConstantObj.getTitle?.() ?? '',
+			billingTimeframe: planConstantObj.getBillingTimeFrame?.(),
 			current: sitePlanSlug === planSlug,
 			isMonthlyPlan,
 			cartItemForPlan,

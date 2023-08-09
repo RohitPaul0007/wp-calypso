@@ -465,7 +465,7 @@ export class PlanFeatures2023Grid extends Component<
 	}
 
 	renderBillingTimeframe( renderedGridPlans: GridPlan[], options?: PlanRowOptions ) {
-		return renderedGridPlans.map( ( { planConstantObj, planSlug } ) => {
+		return renderedGridPlans.map( ( { planSlug } ) => {
 			const classes = classNames(
 				'plan-features-2023-grid__table-item',
 				'plan-features-2023-grid__header-billing-info'
@@ -473,10 +473,7 @@ export class PlanFeatures2023Grid extends Component<
 
 			return (
 				<Container className={ classes } isTableCell={ options?.isTableCell } key={ planSlug }>
-					<PlanFeatures2023GridBillingTimeframe
-						planSlug={ planSlug }
-						billingTimeframe={ planConstantObj.getBillingTimeFrame() }
-					/>
+					<PlanFeatures2023GridBillingTimeframe planSlug={ planSlug } />
 				</Container>
 			);
 		} );
