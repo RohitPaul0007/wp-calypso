@@ -22,6 +22,7 @@ import QuerySitePlans from 'calypso/components/data/query-site-plans';
 import QuerySites from 'calypso/components/data/query-sites';
 import FormattedHeader from 'calypso/components/formatted-header';
 import { retargetViewPlans } from 'calypso/lib/analytics/ad-tracking';
+import { recordTracksEvent } from 'calypso/lib/analytics/tracks';
 import { planItem as getCartItemForPlan } from 'calypso/lib/cart-values/cart-items';
 import { isValidFeatureKey, FEATURES_LIST } from 'calypso/lib/plans/features-list';
 import scrollIntoViewport from 'calypso/lib/scroll-into-viewport';
@@ -31,7 +32,6 @@ import usePlanFeaturesForGridPlans from 'calypso/my-sites/plan-features-2023-gri
 import useRestructuredPlanFeaturesForComparisonGrid from 'calypso/my-sites/plan-features-2023-grid/hooks/npm-ready/data-store/use-restructured-plan-features-for-comparison-grid';
 import PlanNotice from 'calypso/my-sites/plans-features-main/components/plan-notice';
 import PlanTypeSelector from 'calypso/my-sites/plans-features-main/components/plan-type-selector';
-import { recordTracksEvent } from 'calypso/state/analytics/actions';
 import { getCurrentUserName } from 'calypso/state/current-user/selectors';
 import canUpgradeToPlan from 'calypso/state/selectors/can-upgrade-to-plan';
 import getDomainFromHomeUpsellInQuery from 'calypso/state/selectors/get-domain-from-home-upsell-in-query';
