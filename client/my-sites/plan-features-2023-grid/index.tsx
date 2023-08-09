@@ -500,7 +500,7 @@ export class PlanFeatures2023Grid extends Component<
 	}
 
 	renderPlanHeaders( renderedGridPlans: GridPlan[], options?: PlanRowOptions ) {
-		return renderedGridPlans.map( ( { planSlug, planConstantObj } ) => {
+		return renderedGridPlans.map( ( { planSlug, planTitle } ) => {
 			const headerClasses = classNames(
 				'plan-features-2023-grid__header',
 				getPlanClass( planSlug )
@@ -513,9 +513,7 @@ export class PlanFeatures2023Grid extends Component<
 					isTableCell={ options?.isTableCell }
 				>
 					<header className={ headerClasses }>
-						<h4 className="plan-features-2023-grid__header-title">
-							{ planConstantObj.getTitle() }
-						</h4>
+						<h4 className="plan-features-2023-grid__header-title">{ planTitle }</h4>
 					</header>
 				</Container>
 			);
