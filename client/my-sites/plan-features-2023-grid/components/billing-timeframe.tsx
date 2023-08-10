@@ -8,19 +8,72 @@ import {
 	getPlanSlugForTermVariant,
 	TERM_ANNUALLY,
 	isWooExpressPlan,
+	PLAN_MONTHLY_PERIOD,
 } from '@automattic/calypso-products';
 import { formatCurrency } from '@automattic/format-currency';
 import styled from '@emotion/styled';
 import { useTranslate } from 'i18n-calypso';
 import { usePlansGridContext } from '../grid-context';
 
-function usePerMonthDescription( { planSlug }: { planSlug: PlanSlug } ) {
+function usePerMonthDescription( {
+	planSlug,
+	isStrikeoutMonthlyPricingUsedForPromotion,
+}: {
+	planSlug: PlanSlug;
+	isStrikeoutMonthlyPricingUsedForPromotion?: boolean;
+} ) {
 	const translate = useTranslate();
 	const { helpers, gridPlansIndex, intent } = usePlansGridContext();
 	const {
 		isMonthlyPlan,
 		pricing: { currencyCode, originalPrice, discountedPrice, billingPeriod },
 	} = gridPlansIndex[ planSlug ];
+
+	if ( isWpComFreePlan( planSlug ) || isWpcomEnterpriseGridPlan( planSlug ) ) {
+		return null;
+	}
+
+	// shorter pricing descriptions used when promotions are active and strikeout monthly pricing is needed
+	// these take precedence over the other pricing descriptions
+	if ( isStrikeoutMonthlyPricingUsedForPromotion ) {
+		const discountedPriceMonthlyText =
+			currencyCode && discountedPrice?.monthly
+				? formatCurrency( discountedPrice.monthly, currencyCode, { stripZeros: true } )
+				: null;
+		const originalPriceMonthlyText =
+			currencyCode && originalPrice?.monthly
+				? formatCurrency( originalPrice.monthly, currencyCode, { stripZeros: true } )
+				: null;
+		const priceText = discountedPriceMonthlyText || originalPriceMonthlyText;
+
+		if ( priceText ) {
+			if ( PLAN_MONTHLY_PERIOD === billingPeriod ) {
+				return translate( '%(priceText)s/month', {
+					args: { priceText },
+				} );
+			}
+
+			if ( PLAN_ANNUAL_PERIOD === billingPeriod ) {
+				return translate( '%(priceText)s/month, billed annually', {
+					args: { priceText },
+				} );
+			}
+
+			if ( PLAN_BIENNIAL_PERIOD === billingPeriod ) {
+				return translate( '%(priceText)s/month, billed biennially', {
+					args: { priceText },
+				} );
+			}
+
+			if ( PLAN_TRIENNIAL_PERIOD === billingPeriod ) {
+				return translate( '%(priceText)s/month, billed triennially', {
+					args: { priceText },
+				} );
+			}
+		}
+
+		return null;
+	}
 
 	// We want the yearly-variant plan's price to be the raw price the user
 	// would pay if they choose an annual plan instead of the monthly one. So pro-rated
@@ -32,10 +85,6 @@ function usePerMonthDescription( { planSlug }: { planSlug: PlanSlug } ) {
 		plansIntent: intent,
 		withoutProRatedCredits: true,
 	} )[ yearlyVariantPlanSlug ];
-
-	if ( isWpComFreePlan( planSlug ) || isWpcomEnterpriseGridPlan( planSlug ) ) {
-		return null;
-	}
 
 	if ( isMonthlyPlan && originalPrice?.monthly && yearlyVariantPricing ) {
 		const yearlyVariantMaybeDiscountedPrice =
@@ -133,16 +182,27 @@ const DiscountPromotion = styled.div`
 
 interface Props {
 	planSlug: PlanSlug;
+	// for shorter pricing descriptions used when promotions are active and strikeout monthly pricing is needed
+	isStrikeoutMonthlyPricingUsedForPromotion?: boolean;
 }
 
-const PlanFeatures2023GridBillingTimeframe = ( { planSlug }: Props ) => {
+const PlanFeatures2023GridBillingTimeframe = ( {
+	planSlug,
+	isStrikeoutMonthlyPricingUsedForPromotion,
+}: Props ) => {
 	const translate = useTranslate();
 	const { gridPlansIndex } = usePlansGridContext();
 	const { isMonthlyPlan, billingTimeframe, pricing } = gridPlansIndex[ planSlug ];
-	const perMonthDescription = usePerMonthDescription( { planSlug } );
-	const description = pricing.promoPrice?.description || perMonthDescription || billingTimeframe;
+	const perMonthDescription = usePerMonthDescription( {
+		planSlug,
+		isStrikeoutMonthlyPricingUsedForPromotion,
+	} );
+	const description =
+		( ! isStrikeoutMonthlyPricingUsedForPromotion && pricing.promoPrice?.description ) ||
+		perMonthDescription ||
+		billingTimeframe;
 
-	if ( isWooExpressPlan( planSlug ) && isMonthlyPlan ) {
+	if ( isWooExpressPlan( planSlug ) && isMonthlyPlan && ! pricing.promoPrice ) {
 		return (
 			<div>
 				<div>{ billingTimeframe }</div>

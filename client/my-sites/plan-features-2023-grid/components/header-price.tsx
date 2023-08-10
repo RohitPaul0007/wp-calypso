@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { useTranslate } from 'i18n-calypso';
 import PlanPrice from 'calypso/my-sites/plan-price';
 import { usePlansGridContext } from '../grid-context';
+import PlanFeatures2023GridBillingTimeframe from './billing-timeframe';
 
 interface PlanFeatures2023GridHeaderPriceProps {
 	planSlug: PlanSlug;
@@ -20,19 +21,23 @@ const PricesGroup = styled.div< { isLargeCurrency: boolean } >`
 	gap: 4px;
 `;
 
-const Badge = styled.div`
-	text-align: center;
+const Badge = styled.div< { isPromoPrice?: boolean } >`
 	white-space: nowrap;
 	font-size: 0.75rem;
 	font-weight: 500;
 	letter-spacing: 0.2px;
 	line-height: 1.25rem;
-	padding: 0 12px;
 	border-radius: 4px;
 	height: 21px;
-	background-color: var( --studio-green-0 );
 	display: inline-block;
-	color: var( --studio-green-40 );
+	width: fit-content;
+	text-align: ${ ( { isPromoPrice } ) => ( isPromoPrice ? 'left' : 'center' ) };
+	padding: ${ ( { isPromoPrice } ) => ( isPromoPrice ? '0 6px' : '0 12px' ) };
+	background-color: ${ ( { isPromoPrice } ) =>
+		isPromoPrice ? 'var( --studio-blue-0 )' : 'var( --studio-green-0 )' };
+	color: ${ ( { isPromoPrice } ) =>
+		isPromoPrice ? 'var( --studio-blue-40 )' : 'var( --studio-green-40 )' };
+	text-decoration: ${ ( { isPromoPrice } ) => ( isPromoPrice ? 'line-through' : 'none' ) };
 `;
 
 const HeaderPriceContainer = styled.div`
@@ -142,13 +147,21 @@ const PlanFeatures2023GridHeaderPrice = ( {
 			{ isPricedPlan ? (
 				<HeaderPriceContainer>
 					{ promoPrice && (
-						<PlanPrice
-							currencyCode={ currencyCode }
-							rawPrice={ promoPrice.price }
-							displayPerMonthNotation={ false }
-							isLargeCurrency={ isLargeCurrency }
-							priceDisplayWrapperClassName="plans-grid-2023__html-price-display-wrapper"
-						/>
+						<>
+							<Badge className="plan-features-2023-grid__badge" isPromoPrice={ true }>
+								<PlanFeatures2023GridBillingTimeframe
+									planSlug={ planSlug }
+									isStrikeoutMonthlyPricingUsedForPromotion={ true }
+								/>
+							</Badge>
+							<PlanPrice
+								currencyCode={ currencyCode }
+								rawPrice={ promoPrice.price }
+								displayPerMonthNotation={ false }
+								isLargeCurrency={ isLargeCurrency }
+								priceDisplayWrapperClassName="plans-grid-2023__html-price-display-wrapper"
+							/>
+						</>
 					) }
 					{ ! promoPrice && shouldShowDiscountedPrice && (
 						<>

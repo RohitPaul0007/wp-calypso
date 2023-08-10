@@ -3,6 +3,8 @@ import {
 	TYPE_PERSONAL,
 	TYPE_PREMIUM,
 	findPlansKeys,
+	TYPE_WOOEXPRESS_SMALL,
+	TYPE_WOOEXPRESS_MEDIUM,
 } from '@automattic/calypso-products';
 import { type TranslateResult, useTranslate } from 'i18n-calypso';
 import { useSelector } from 'react-redux';
@@ -42,6 +44,14 @@ const useActivePlanPromotions: UseActivePlanPromotion = ( { planSlugs, plansInte
 			active: true,
 			applicablePlanTypes: [ TYPE_PERSONAL, TYPE_PREMIUM ],
 			applicablePlansIntents: [ 'plans-default-wpcom' ],
+			price: 0.01,
+			description: translate( 'per month, forever!' ),
+		},
+		{
+			productSlug: 'foo',
+			active: true,
+			applicablePlanTypes: [ TYPE_WOOEXPRESS_SMALL, TYPE_WOOEXPRESS_MEDIUM ],
+			applicablePlansIntents: [ 'plans-woocommerce' ],
 			price: 1,
 			description: translate( 'per month, for your first 3 months' ),
 		},
