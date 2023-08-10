@@ -128,7 +128,7 @@ const PlanFeatures2023GridHeaderPrice = ( {
 	const translate = useTranslate();
 	const { gridPlansIndex } = usePlansGridContext();
 	const {
-		pricing: { currencyCode, originalPrice, discountedPrice },
+		pricing: { currencyCode, originalPrice, discountedPrice, promoPrice },
 	} = gridPlansIndex[ planSlug ];
 	const shouldShowDiscountedPrice = Boolean( discountedPrice.monthly );
 	const isPricedPlan = null !== originalPrice.monthly;
@@ -141,7 +141,16 @@ const PlanFeatures2023GridHeaderPrice = ( {
 		<>
 			{ isPricedPlan ? (
 				<HeaderPriceContainer>
-					{ shouldShowDiscountedPrice && (
+					{ promoPrice && (
+						<PlanPrice
+							currencyCode={ currencyCode }
+							rawPrice={ promoPrice.price }
+							displayPerMonthNotation={ false }
+							isLargeCurrency={ isLargeCurrency }
+							priceDisplayWrapperClassName="plans-grid-2023__html-price-display-wrapper"
+						/>
+					) }
+					{ ! promoPrice && shouldShowDiscountedPrice && (
 						<>
 							<Badge className="plan-features-2023-grid__badge">
 								{ isPlanUpgradeCreditEligible
@@ -168,7 +177,7 @@ const PlanFeatures2023GridHeaderPrice = ( {
 							</PricesGroup>
 						</>
 					) }
-					{ ! shouldShowDiscountedPrice && (
+					{ ! promoPrice && ! shouldShowDiscountedPrice && (
 						<PlanPrice
 							currencyCode={ currencyCode }
 							rawPrice={ originalPrice.monthly }

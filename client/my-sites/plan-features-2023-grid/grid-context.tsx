@@ -7,7 +7,7 @@ import type {
 import type { FeatureList } from '@automattic/calypso-products';
 
 interface PlansGridContext {
-	intent?: PlansIntent;
+	intent: PlansIntent;
 	gridPlans: GridPlan[];
 	gridPlansIndex: { [ key: string ]: GridPlan };
 	allFeaturesList: FeatureList;
@@ -17,7 +17,7 @@ interface PlansGridContext {
 const PlansGridContext = createContext< PlansGridContext >( {} as PlansGridContext );
 
 interface PlansGridContextProviderProps {
-	intent?: PlansIntent;
+	intent: PlansIntent;
 	gridPlans: GridPlan[];
 	usePricingMetaForGridPlans: UsePricingMetaForGridPlans;
 	allFeaturesList: FeatureList;

@@ -16,7 +16,7 @@ import { usePlansGridContext } from '../grid-context';
 
 function usePerMonthDescription( { planSlug }: { planSlug: PlanSlug } ) {
 	const translate = useTranslate();
-	const { helpers, gridPlansIndex } = usePlansGridContext();
+	const { helpers, gridPlansIndex, intent } = usePlansGridContext();
 	const {
 		isMonthlyPlan,
 		pricing: { currencyCode, originalPrice, discountedPrice, billingPeriod },
@@ -29,6 +29,7 @@ function usePerMonthDescription( { planSlug }: { planSlug: PlanSlug } ) {
 		getPlanSlugForTermVariant( planSlug, TERM_ANNUALLY ) ?? ( '' as PlanSlug );
 	const yearlyVariantPricing = helpers?.usePricingMetaForGridPlans( {
 		planSlugs: [ yearlyVariantPlanSlug ],
+		plansIntent: intent,
 		withoutProRatedCredits: true,
 	} )[ yearlyVariantPlanSlug ];
 
@@ -137,9 +138,9 @@ interface Props {
 const PlanFeatures2023GridBillingTimeframe = ( { planSlug }: Props ) => {
 	const translate = useTranslate();
 	const { gridPlansIndex } = usePlansGridContext();
-	const { isMonthlyPlan, billingTimeframe } = gridPlansIndex[ planSlug ];
+	const { isMonthlyPlan, billingTimeframe, pricing } = gridPlansIndex[ planSlug ];
 	const perMonthDescription = usePerMonthDescription( { planSlug } );
-	const description = perMonthDescription || billingTimeframe;
+	const description = pricing.promoPrice?.description || perMonthDescription || billingTimeframe;
 
 	if ( isWooExpressPlan( planSlug ) && isMonthlyPlan ) {
 		return (

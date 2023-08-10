@@ -55,6 +55,12 @@ export interface PricingMetaForGridPlan {
 		monthly: number | null;
 		full: number | null;
 	};
+	promoPrice?: {
+		// this is a single price unit that will override the originalPrice and discountedPrice
+		price: number;
+		// this is the price/billing description that will override the per-month billing descriptions
+		description?: TranslateResult;
+	};
 }
 
 export type UsePricedAPIPlans = ( { planSlugs }: { planSlugs: PlanSlug[] } ) => {
@@ -63,9 +69,11 @@ export type UsePricedAPIPlans = ( { planSlugs }: { planSlugs: PlanSlug[] } ) => 
 
 export type UsePricingMetaForGridPlans = ( {
 	planSlugs,
+	plansIntent,
 	withoutProRatedCredits,
 }: {
 	planSlugs: PlanSlug[];
+	plansIntent: PlansIntent;
 	withoutProRatedCredits?: boolean;
 } ) => { [ planSlug: string ]: PricingMetaForGridPlan };
 
@@ -114,7 +122,7 @@ interface Props {
 	usePricingMetaForGridPlans: UsePricingMetaForGridPlans;
 	selectedFeature?: string | null;
 	term?: ( typeof TERMS_LIST )[ number ]; // defaults to monthly
-	intent?: PlansIntent;
+	intent: PlansIntent;
 	selectedPlan?: PlanSlug;
 	sitePlanSlug?: PlanSlug | null;
 	hideEnterprisePlan?: boolean;
@@ -247,7 +255,10 @@ const useGridPlans = ( {
 	// TODO: pricedAPIPlans to be queried from data-store package
 	const pricedAPIPlans = usePricedAPIPlans( { planSlugs: availablePlanSlugs } );
 
-	const pricingMeta = usePricingMetaForGridPlans( { planSlugs: availablePlanSlugs } );
+	const pricingMeta = usePricingMetaForGridPlans( {
+		planSlugs: availablePlanSlugs,
+		plansIntent: intent,
+	} );
 
 	return availablePlanSlugs.map( ( planSlug ) => {
 		const planConstantObj = applyTestFiltersToPlansList( planSlug, undefined );

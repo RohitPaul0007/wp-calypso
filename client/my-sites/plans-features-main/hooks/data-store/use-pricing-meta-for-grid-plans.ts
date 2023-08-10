@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux';
+import useActivePlanPromotions from 'calypso/my-sites/plans-features-main/hooks/data-store/use-active-plan-promotions';
 import usePricedAPIPlans from 'calypso/my-sites/plans-features-main/hooks/data-store/use-priced-api-plans';
 import { getPlanPrices } from 'calypso/state/plans/selectors';
 import {
@@ -11,12 +12,14 @@ import type { PlanSlug } from '@automattic/calypso-products';
 import type {
 	UsePricingMetaForGridPlans,
 	PricingMetaForGridPlan,
+	PlansIntent,
 } from 'calypso/my-sites/plan-features-2023-grid/hooks/npm-ready/data-store/use-grid-plans';
 import type { IAppState } from 'calypso/state/types';
 
 interface Props {
 	planSlugs: PlanSlug[];
 	withoutProRatedCredits?: boolean;
+	plansIntent: PlansIntent;
 }
 
 /*
@@ -27,8 +30,10 @@ interface Props {
 const usePricingMetaForGridPlans: UsePricingMetaForGridPlans = ( {
 	planSlugs,
 	withoutProRatedCredits = false,
+	plansIntent,
 }: Props ) => {
 	const pricedAPIPlans = usePricedAPIPlans( { planSlugs: planSlugs } );
+	const activePlanPromotions = useActivePlanPromotions( { planSlugs, plansIntent } );
 	const planPrices = useSelector( ( state: IAppState ) => {
 		return planSlugs.reduce( ( acc, planSlug ) => {
 			const selectedSiteId = getSelectedSiteId( state );
@@ -106,18 +111,21 @@ const usePricingMetaForGridPlans: UsePricingMetaForGridPlans = ( {
 		}, {} as { [ planSlug: string ]: Pick< PricingMetaForGridPlan, 'originalPrice' | 'discountedPrice' > } );
 	} );
 
-	return planSlugs.reduce(
-		( acc, planSlug ) => ( {
+	return planSlugs.reduce( ( acc, planSlug ) => {
+		const planPromotion = activePlanPromotions[ planSlug ];
+		return {
 			...acc,
 			[ planSlug ]: {
 				originalPrice: planPrices[ planSlug ]?.originalPrice,
 				discountedPrice: planPrices[ planSlug ]?.discountedPrice,
 				billingPeriod: pricedAPIPlans[ planSlug ]?.bill_period,
 				currencyCode: pricedAPIPlans[ planSlug ]?.currency_code,
+				...( planPromotion && {
+					promoPrice: { price: planPromotion.price, description: planPromotion.description },
+				} ),
 			},
-		} ),
-		{} as { [ planSlug: string ]: PricingMetaForGridPlan }
-	);
+		};
+	}, {} as { [ planSlug: string ]: PricingMetaForGridPlan } );
 };
 
 export default usePricingMetaForGridPlans;
