@@ -6,20 +6,22 @@ import {
 	BlockFlow,
 	PayWithPaypalBlockFlow,
 	OpenTableFlow,
+	PaywallFlow,
 	// PaymentsBlockFlow,
 	// envVariables,
 } from '@automattic/calypso-e2e';
 import { createBlockTests } from './shared/block-smoke-testing';
 
 const blockFlows: BlockFlow[] = [
-	new PayWithPaypalBlockFlow( {
-		name: 'Test Paypal Block',
-		price: 900,
-		email: 'test@wordpress.com',
-	} ),
-	new OpenTableFlow( {
-		restaurant: 'Miku Restaurant - Vancouver',
-	} ),
+	// new PayWithPaypalBlockFlow( {
+	// 	name: 'Test Paypal Block',
+	// 	price: 900,
+	// 	email: 'test@wordpress.com',
+	// } ),
+	// new OpenTableFlow( {
+	// 	restaurant: 'Miku Restaurant - Vancouver',
+	// } ),
+	new PaywallFlow(),
 ];
 
 // We're just skipping the Payments Button test for now due to this bug:

@@ -18,6 +18,7 @@ export * from './slideshow';
 export * from './tiled-gallery';
 export * from './youtube';
 export * from './layout-grid';
+export * from './paywall';
 
 /* Types */
 export * from './types';
