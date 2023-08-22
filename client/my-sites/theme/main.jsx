@@ -1015,7 +1015,7 @@ class ThemeSheet extends Component {
 			if ( ! isMarketplaceThemeSubscribed && ! isSiteEligibleForManagedExternalThemes ) {
 				return translate( 'Upgrade to a Business plan and subscribe to this theme!' );
 			}
-			return translate( 'Subscribe to this premium theme!' );
+			return translate( 'Subscribe to this theme!' );
 		}
 
 		return translate( 'Access this theme for FREE with a Premium or Business plan!' );
@@ -1037,10 +1037,10 @@ class ThemeSheet extends Component {
 		} else if ( isExternallyManagedTheme ) {
 			if ( ! isMarketplaceThemeSubscribed && ! isSiteEligibleForManagedExternalThemes ) {
 				return translate(
-					'Unlock this theme by upgrading to a Business plan and subscribing to this premium theme.'
+					'Unlock this theme by upgrading to a Business plan and subscribing to this theme.'
 				);
 			}
-			return translate( 'Subscribe to this premium theme and unlock all its features.' );
+			return translate( 'Subscribe to this theme and unlock all its features.' );
 		}
 
 		return translate(
