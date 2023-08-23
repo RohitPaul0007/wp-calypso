@@ -47,6 +47,7 @@ import { setPrimaryDomain } from 'calypso/state/sites/domains/actions';
 import { hasDomainCredit } from 'calypso/state/sites/plans/selectors';
 import DomainsTable from './domains-table';
 import DomainsTableFilterButton from './domains-table-filter-button';
+import GoogleDomainOwnerBanner from './google-domain-owner-banner';
 import { filterDomainsByOwner } from './helpers';
 import {
 	countDomainsInOrangeStatus,
@@ -179,19 +180,6 @@ export class SiteDomains extends Component {
 
 				{ ! this.isLoading() && <GoogleSaleBanner domains={ domains } /> }
 
-				{ wpcomDomain && (
-					<FreeDomainItem
-						key="wpcom-domain-item"
-						isAtomicSite={ isAtomicSite }
-						currentRoute={ currentRoute }
-						domain={ wpcomDomain }
-						disabled={ disabled }
-						isBusy={ settingPrimaryDomain }
-						site={ selectedSite }
-						onMakePrimary={ this.handleUpdatePrimaryDomainWpcom }
-					/>
-				) }
-
 				<div
 					className={ classnames( 'domain-management-list__items', {
 						[ 'has-no-wpcom-domain' ]: ! wpcomDomain,
@@ -200,6 +188,7 @@ export class SiteDomains extends Component {
 					<div className="domain-management-list__filter">
 						{ this.renderDomainTableFilterButton() }
 					</div>
+					<GoogleDomainOwnerBanner />
 					<DomainsTable
 						currentRoute={ currentRoute }
 						domains={ nonWpcomDomains }
@@ -215,6 +204,20 @@ export class SiteDomains extends Component {
 						hasLoadedPurchases={ ! isFetchingPurchases }
 					/>
 				</div>
+
+				{ wpcomDomain && (
+					<FreeDomainItem
+						key="wpcom-domain-item"
+						isAtomicSite={ isAtomicSite }
+						currentRoute={ currentRoute }
+						domain={ wpcomDomain }
+						disabled={ disabled }
+						isBusy={ settingPrimaryDomain }
+						site={ selectedSite }
+						onMakePrimary={ this.handleUpdatePrimaryDomainWpcom }
+					/>
+				) }
+
 				{ ! this.isLoading() && nonWpcomDomains.length === 0 && ! selectedFilter && (
 					<EmptyDomainsListCard
 						selectedSite={ selectedSite }
