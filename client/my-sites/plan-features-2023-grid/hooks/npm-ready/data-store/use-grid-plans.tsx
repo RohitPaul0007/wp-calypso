@@ -20,7 +20,11 @@ import {
 	type PlanSlug,
 	type FeatureObject,
 	type StorageOption,
+	isBusinessPlan,
+	isEcommercePlan,
 } from '@automattic/calypso-products';
+// TODO: Remove this dependency to the Calypso environment before testing or QA
+import { AddOnMeta } from 'calypso/my-sites/add-ons/hooks/use-add-ons';
 import useHighlightLabels from './use-highlight-labels';
 import usePlansFromTypes from './use-plans-from-types';
 import type { PricedAPIPlan } from '@automattic/data-stores';
@@ -91,6 +95,7 @@ export type GridPlan = {
 	} | null;
 	highlightLabel?: React.ReactNode | null;
 	pricing: PricingMetaForGridPlan;
+	storageAddOnsForPlan: AddOnMeta[];
 };
 
 // TODO clk: move to plans data store
@@ -128,6 +133,7 @@ interface Props {
 	showLegacyStorageFeature?: boolean;
 	// for AB Test experiment:
 	isGlobalStylesOnPersonal?: boolean;
+	storageAddOns: AddOnMeta[];
 }
 
 const usePlanTypesWithIntent = ( {
@@ -225,6 +231,7 @@ const useGridPlans = ( {
 	isInSignup,
 	usePlanUpgradeabilityCheck,
 	isGlobalStylesOnPersonal,
+	storageAddOns,
 }: Props ): Omit< GridPlan, 'features' >[] => {
 	const availablePlanSlugs = usePlansFromTypes( {
 		planTypes: usePlanTypesWithIntent( {
@@ -290,6 +297,9 @@ const useGridPlans = ( {
 						product_slug: planSlug,
 				  };
 
+		const storageAddOnsForPlan =
+			isBusinessPlan( planSlug ) || isEcommercePlan( planSlug ) ? storageAddOns : null;
+
 		return {
 			planSlug,
 			isVisible: planSlugsForIntent.includes( planSlug ),
@@ -303,6 +313,7 @@ const useGridPlans = ( {
 			cartItemForPlan,
 			highlightLabel: highlightLabels[ planSlug ],
 			pricing: pricingMeta[ planSlug ],
+			storageAddOnsForPlan,
 		};
 	} );
 };

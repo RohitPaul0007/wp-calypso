@@ -8,6 +8,7 @@ import {
 	isPersonalPlan,
 	PlanSlug,
 	PLAN_PERSONAL,
+	PRODUCT_1GB_SPACE,
 } from '@automattic/calypso-products';
 import { Button } from '@automattic/components';
 import { WpcomPlansUI } from '@automattic/data-stores';
@@ -42,6 +43,7 @@ import isEligibleForWpComMonthlyPlan from 'calypso/state/selectors/is-eligible-f
 import { useSiteGlobalStylesStatus } from 'calypso/state/sites/hooks/use-site-global-styles-status';
 import { getCurrentPlan } from 'calypso/state/sites/plans/selectors';
 import { getSitePlanSlug, getSiteSlug } from 'calypso/state/sites/selectors';
+import useAddOns from '../add-ons/hooks/use-add-ons';
 import { FreePlanFreeDomainDialog } from './components/free-plan-free-domain-dialog';
 import { FreePlanPaidDomainDialog } from './components/free-plan-paid-domain-dialog';
 import usePricedAPIPlans from './hooks/data-store/use-priced-api-plans';
@@ -216,6 +218,9 @@ const PlansFeaturesMain = ( {
 	const [ masterbarHeight, setMasterbarHeight ] = useState( 0 );
 	const translate = useTranslate();
 	const plansComparisonGridRef = useRef< HTMLDivElement >( null );
+	const storageAddOns = useAddOns( siteId as number ).filter(
+		( addOn ) => addOn?.productSlug === PRODUCT_1GB_SPACE
+	);
 	const currentPlan = useSelector( ( state: IAppState ) => getCurrentPlan( state, siteId ) );
 	const eligibleForWpcomMonthlyPlans = useSelector( ( state: IAppState ) =>
 		isEligibleForWpComMonthlyPlan( state, siteId )
@@ -341,6 +346,7 @@ const PlansFeaturesMain = ( {
 		usePlanUpgradeabilityCheck,
 		showLegacyStorageFeature,
 		isGlobalStylesOnPersonal: globalStylesInPersonalPlan,
+		storageAddOns,
 	} );
 
 	const planFeaturesForFeaturesGrid = usePlanFeaturesForGridPlans( {
