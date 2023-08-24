@@ -61,7 +61,6 @@ export const PreMigrationScreen: React.FunctionComponent< PreMigrationProps > = 
 	const [ selectedHost, setSelectedHost ] = useState( 'generic' );
 	const [ selectedProtocol, setSelectedProtocol ] = useState< 'ftp' | 'ssh' >( 'ftp' );
 	const [ hasLoaded, setHasLoaded ] = useState( false );
-	const [ showUpdatePluginInfo, setShowUpdatePluginInfo ] = useState( false );
 	const fetchMigrationEnabledOnMount = isTargetSitePlanCompatible ? true : false;
 	const [ continueImport, setContinueImport ] = useState( false );
 	const urlQueryParams = useQuery();
@@ -73,25 +72,15 @@ export const PreMigrationScreen: React.FunctionComponent< PreMigrationProps > = 
 		dispatch( recordTracksEvent( 'calypso_site_migration_credentials_form_toggle' ) );
 	};
 
-	const onfetchCallback = ( siteCanMigrate: boolean ) => {
-		if ( ! siteCanMigrate ) {
-			setShowUpdatePluginInfo( true );
-		} else {
-			setShowUpdatePluginInfo( false );
-		}
-	};
-
 	const {
 		sourceSiteId,
 		sourceSite,
 		fetchMigrationEnabledStatus,
 		isFetchingData: isFetchingMigrationData,
-	} = useSiteMigrateInfo(
-		targetSite.ID,
-		sourceSiteSlug,
-		fetchMigrationEnabledOnMount,
-		onfetchCallback
-	);
+		siteCanMigrate,
+	} = useSiteMigrateInfo( targetSite.ID, sourceSiteSlug, fetchMigrationEnabledOnMount );
+
+	const showUpdatePluginInfo = ! siteCanMigrate;
 
 	const [ queryTargetSitePlanStatus, setQueryTargetSitePlanStatus ] = useState<
 		'init' | 'fetching' | 'fetched'
