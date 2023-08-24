@@ -80,7 +80,7 @@ export const PreMigrationScreen: React.FunctionComponent< PreMigrationProps > = 
 		siteCanMigrate,
 	} = useSiteMigrateInfo( targetSite.ID, sourceSiteSlug, fetchMigrationEnabledOnMount );
 
-	const showUpdatePluginInfo = ! siteCanMigrate;
+	const showUpdatePluginInfo = typeof siteCanMigrate === 'boolean' ? ! siteCanMigrate : false;
 
 	const [ queryTargetSitePlanStatus, setQueryTargetSitePlanStatus ] = useState<
 		'init' | 'fetching' | 'fetched'
