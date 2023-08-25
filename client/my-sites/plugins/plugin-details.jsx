@@ -19,6 +19,7 @@ import NoticeAction from 'calypso/components/notice/notice-action';
 import { useESPlugin } from 'calypso/data/marketplace/use-es-query';
 import { useWPCOMPlugin } from 'calypso/data/marketplace/use-wpcom-plugins-query';
 import PageViewTracker from 'calypso/lib/analytics/page-view-tracker';
+import { fetchWordPressVersions } from 'calypso/lib/wporg';
 import PluginNotices from 'calypso/my-sites/plugins/notices';
 import { isCompatiblePlugin } from 'calypso/my-sites/plugins/plugin-compatibility';
 import PluginDetailsCTA from 'calypso/my-sites/plugins/plugin-details-CTA';
@@ -153,6 +154,13 @@ function PluginDetails( props ) {
 		dispatch,
 		translate.localeSlug,
 	] );
+
+	useEffect( () => {
+		async function doFetchWordPressVersions() {
+			await fetchWordPressVersions();
+		}
+		doFetchWordPressVersions();
+	}, [] );
 
 	// Fetch WPcom plugin data if needed
 	const {
