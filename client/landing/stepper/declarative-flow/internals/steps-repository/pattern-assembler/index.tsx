@@ -386,6 +386,7 @@ const PatternAssembler = ( {
 
 		recordSelectedDesign( { flow, intent, design } );
 		submit?.();
+		trackEventContinue();
 	};
 
 	const onUpgradeLater = () => {
@@ -410,8 +411,6 @@ const PatternAssembler = ( {
 	} );
 
 	const onContinueClick = () => {
-		trackEventContinue();
-
 		if ( shouldUnlockGlobalStyles ) {
 			openGlobalStylesUpgradeModal();
 			return;
@@ -532,7 +531,7 @@ const PatternAssembler = ( {
 				</NavigatorScreen>
 
 				<NavigatorScreen path={ NAVIGATOR_PATHS.CONFIRMATION } className="screen-confirmation">
-					<ScreenConfirmation onConfirm={ onConfirm } />
+					<ScreenConfirmation onConfirm={ onConfirm } recordTracksEvent={ recordTracksEvent } />
 				</NavigatorScreen>
 			</div>
 			<div className="pattern-assembler__sidebar-panel">

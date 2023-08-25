@@ -30,7 +30,7 @@ const ScreenStyles = ( {
 	const translate = useTranslate();
 	const isEnglishLocale = useIsEnglishLocale();
 	const [ disabled, setDisabled ] = useState( true );
-	const { location, goTo, goBack } = useNavigator();
+	const { location, goTo } = useNavigator();
 
 	const handleNavigatorItemSelect = ( type: string, path: string ) => {
 		const nextPath = path !== location.path ? path : NAVIGATOR_PATHS.STYLES;
@@ -39,7 +39,6 @@ const ScreenStyles = ( {
 	};
 
 	const handleBackClick = () => {
-		goBack();
 		recordTracksEvent( PATTERN_ASSEMBLER_EVENTS.SCREEN_BACK_CLICK, {
 			screen_from: 'styles',
 			screen_to: 'main',
