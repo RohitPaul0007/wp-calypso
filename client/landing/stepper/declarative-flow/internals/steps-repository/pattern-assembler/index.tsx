@@ -38,6 +38,7 @@ import usePatternCategories from './hooks/use-pattern-categories';
 import usePatternsMapByCategory from './hooks/use-patterns-map-by-category';
 import { usePrefetchImages } from './hooks/use-prefetch-images';
 import useRecipe from './hooks/use-recipe';
+import useSyncNavigatorScreen from './hooks/use-sync-navigator-screen';
 import withNotices, { NoticesProps } from './notices/notices';
 import PatternAssemblerContainer from './pattern-assembler-container';
 import PatternLargePreview from './pattern-large-preview';
@@ -141,6 +142,7 @@ const PatternAssembler = ( {
 	const syncedGlobalStylesUserConfig = useSyncGlobalStylesUserConfig( selectedVariations );
 
 	usePrefetchImages();
+	useSyncNavigatorScreen();
 
 	const siteInfo = {
 		title: site?.name,
