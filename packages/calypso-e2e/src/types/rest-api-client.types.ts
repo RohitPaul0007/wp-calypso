@@ -187,6 +187,18 @@ export interface PluginRemovalResponse {
 	log: string[];
 }
 
+export interface PublicizeConnection {
+	ID: number;
+	site_ID: number;
+	label: string;
+	external_ID: string;
+}
+
+export interface PublicizeConnectionDeletedResponse {
+	ID: number;
+	deleted: boolean;
+}
+
 /* Error Responses */
 
 export interface BearerTokenErrorResponse {
