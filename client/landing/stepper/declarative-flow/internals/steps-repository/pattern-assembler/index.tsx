@@ -33,6 +33,7 @@ import { SITE_TAGLINE, NAVIGATOR_PATHS, CATEGORY_ALL_SLUG, INITIAL_SCREEN } from
 import { PATTERN_ASSEMBLER_EVENTS } from './events';
 import {
 	useCategoryAll,
+	useCurrentScreen,
 	useDotcomPatterns,
 	useGlobalStylesUpgradeModal,
 	useInitialPath,
@@ -144,8 +145,9 @@ const PatternAssembler = ( {
 
 	const syncedGlobalStylesUserConfig = useSyncGlobalStylesUserConfig( selectedVariations );
 
-	const currentScreen = useSyncNavigatorScreen();
+	const currentScreen = useCurrentScreen();
 
+	useSyncNavigatorScreen();
 	usePrefetchImages();
 
 	const siteInfo = {
