@@ -440,7 +440,9 @@ const PatternAssembler = ( {
 		hasSelectedColorVariation: !! colorVariation,
 		hasSelectedFontVariation: !! fontVariation,
 		resetCustomStyles,
+		nextScreenName: isNewSite ? 'confirmation' : 'activation',
 		onUpgradeLater: handleContinue,
+		onContinue: handleContinue,
 		recordTracksEvent,
 	} );
 
