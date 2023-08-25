@@ -14,6 +14,7 @@ export const NAVIGATOR_PATHS = {
 	STYLES_COLORS: '/styles/colors',
 	STYLES_FONTS: '/styles/fonts',
 	ACTIVATION: '/activation',
+	CONFIRMATION: '/confirmation',
 };
 
 export const INITIAL_PATH = NAVIGATOR_PATHS.MAIN_HEADER;
