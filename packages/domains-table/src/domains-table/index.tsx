@@ -62,7 +62,7 @@ export function DomainsTable( {
 		return fetchedSiteDomains;
 	}, [ allSiteDomains ] );
 
-	const { setAutoRenew } = useDomainsBulkActionsMutation();
+	const { setAutoRenew, updateContactInfo } = useDomainsBulkActionsMutation();
 
 	useLayoutEffect( () => {
 		if ( ! domains ) {
@@ -179,11 +179,32 @@ export function DomainsTable( {
 		setAutoRenew( domainsToBulkUpdate, enable );
 	};
 
+	const handleUpdateContactInfo = () => {
+		const domainsToBulkUpdate = domains
+			.filter( ( domain ) => selectedDomains.has( getDomainId( domain ) ) )
+			.map( ( domain ) => domain.domain );
+		updateContactInfo( domainsToBulkUpdate, true, {
+			firstName: '',
+			lastName: '',
+			organization: '',
+			email: '',
+			phone: '',
+			address1: '',
+			address2: '',
+			city: '',
+			state: '',
+			postalCode: '',
+			countryCode: '',
+			fax: '',
+		} );
+	};
+
 	return (
 		<div className="domains-table">
 			{ hasSelectedDomains && (
 				<BulkActionsToolbar
 					onAutoRenew={ handlAutoRenew }
+					onUpdateContactInfo={ handleUpdateContactInfo }
 					selectedDomainCount={ selectedDomains.size }
 				/>
 			) }
