@@ -16,6 +16,7 @@ import {
 	isTitanMail,
 	isDIFMProduct,
 	isTieredVolumeSpaceAddon,
+	is100YearPlan,
 } from '@automattic/calypso-products';
 import {
 	CheckoutModal,
@@ -888,8 +889,22 @@ function PartnerLogo( { className }: { className?: string } ) {
 	/* eslint-enable wpcalypso/jsx-classname-namespace */
 }
 
-function DomainDiscountCallout( { product }: { product: ResponseCartProduct } ) {
+function DomainDiscountCallout( {
+	responseCart,
+	product,
+}: {
+	responseCart: ResponseCart;
+	product: ResponseCartProduct;
+} ) {
 	const translate = useTranslate();
+
+	const planInCart = responseCart.products.find( ( product ) => isPlan( product ) );
+
+	if ( planInCart ) {
+		if ( product.is_bundled && is100YearPlan( planInCart.product_slug ) ) {
+			return <DiscountCallout>{ translate( 'Included with your plan' ) }</DiscountCallout>;
+		}
+	}
 
 	if ( product.is_bundled ) {
 		return <DiscountCallout>{ translate( 'Discount for first year' ) }</DiscountCallout>;
@@ -1065,7 +1080,7 @@ function WPLineItem( {
 					</LineItemMeta>
 					<LineItemMeta>
 						<LineItemSublabelAndPrice product={ product } />
-						<DomainDiscountCallout product={ product } />
+						<DomainDiscountCallout product={ product } responseCart={ responseCart } />
 						<CouponDiscountCallout product={ product } />
 						<IntroductoryOfferCallout product={ product } />
 					</LineItemMeta>
