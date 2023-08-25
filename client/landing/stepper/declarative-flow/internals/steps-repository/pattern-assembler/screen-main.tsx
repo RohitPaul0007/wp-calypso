@@ -19,7 +19,6 @@ import { replaceCategoryAllName } from './utils';
 
 interface Props {
 	onMainItemSelect: ( name: string ) => void;
-	onContinueClick: ( callback?: () => void ) => void;
 	recordTracksEvent: ( name: string, eventProperties?: any ) => void;
 	surveyDismissed: boolean;
 	setSurveyDismissed: ( dismissed: boolean ) => void;
