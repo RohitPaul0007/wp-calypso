@@ -194,7 +194,7 @@ const PatternAssembler = ( {
 		} );
 	};
 
-	const trackEventContinue = () => {
+	const trackSubmit = () => {
 		const patterns = getPatterns();
 		const categories = Array.from( new Set( patterns.map( ( { category } ) => category?.name ) ) );
 
@@ -387,6 +387,8 @@ const PatternAssembler = ( {
 			return;
 		}
 
+		trackSubmit();
+
 		setPendingAction( () =>
 			Promise.resolve()
 				.then( () =>
@@ -443,7 +445,6 @@ const PatternAssembler = ( {
 			return;
 		}
 
-		trackEventContinue();
 		handleContinue();
 	};
 
