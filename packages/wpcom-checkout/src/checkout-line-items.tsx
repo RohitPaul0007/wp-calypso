@@ -36,6 +36,7 @@ import { isWpComProductRenewal } from './is-wpcom-product-renewal';
 import { joinClasses } from './join-classes';
 import { getPartnerCoupon } from './partner-coupon';
 import IonosLogo from './partner-logo-ionos';
+import type { SiteDetails } from '@automattic/data-stores';
 import type {
 	GSuiteProductUser,
 	ResponseCart,
@@ -890,18 +891,27 @@ function PartnerLogo( { className }: { className?: string } ) {
 }
 
 function DomainDiscountCallout( {
-	responseCart,
 	product,
+	responseCart,
+	selectedSiteData,
 }: {
-	responseCart: ResponseCart;
 	product: ResponseCartProduct;
+	responseCart: ResponseCart;
+	selectedSiteData: SiteDetails | undefined | null;
 } ) {
 	const translate = useTranslate();
 
 	const planInCart = responseCart.products.find( ( product ) => isPlan( product ) );
+	const currentSitePlan = selectedSiteData?.plan?.product_slug;
 
 	if ( planInCart ) {
 		if ( product.is_bundled && is100YearPlan( planInCart.product_slug ) ) {
+			return <DiscountCallout>{ translate( 'Included with your plan' ) }</DiscountCallout>;
+		}
+	}
+
+	if ( currentSitePlan ) {
+		if ( product.is_bundled && is100YearPlan( currentSitePlan ) ) {
 			return <DiscountCallout>{ translate( 'Included with your plan' ) }</DiscountCallout>;
 		}
 	}
@@ -971,6 +981,7 @@ function WPLineItem( {
 	isSummary,
 	createUserAndSiteBeforeTransaction,
 	responseCart,
+	selectedSiteData,
 	isPwpoUser,
 	onRemoveProduct,
 	onRemoveProductClick,
@@ -983,6 +994,7 @@ function WPLineItem( {
 	isSummary?: boolean;
 	createUserAndSiteBeforeTransaction?: boolean;
 	responseCart: ResponseCart;
+	selectedSiteData: SiteDetails | undefined | null;
 	isPwpoUser?: boolean;
 	onRemoveProduct?: ( label: string ) => void;
 	onRemoveProductClick?: ( label: string ) => void;
@@ -1080,7 +1092,11 @@ function WPLineItem( {
 					</LineItemMeta>
 					<LineItemMeta>
 						<LineItemSublabelAndPrice product={ product } />
-						<DomainDiscountCallout product={ product } responseCart={ responseCart } />
+						<DomainDiscountCallout
+							product={ product }
+							responseCart={ responseCart }
+							selectedSiteData={ selectedSiteData }
+						/>
 						<CouponDiscountCallout product={ product } />
 						<IntroductoryOfferCallout product={ product } />
 					</LineItemMeta>
