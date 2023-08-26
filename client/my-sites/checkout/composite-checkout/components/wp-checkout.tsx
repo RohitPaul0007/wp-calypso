@@ -413,6 +413,7 @@ export default function WPCheckout( {
 							<CheckoutSummaryBody className="checkout__summary-body">
 								<WPCheckoutOrderSummary
 									siteId={ siteId }
+									selectedSiteData={ selectedSiteData }
 									onChangeSelection={ changeSelection }
 									nextDomainIsFree={ responseCart?.next_domain_is_free }
 								/>
